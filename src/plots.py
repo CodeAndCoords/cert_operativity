@@ -1,10 +1,10 @@
-import pandas as pd
-import numpy as np
-from scipy.stats import chi2
 import matplotlib.pyplot as plt
+import streamlit as st
+import numpy as np
 
 def generar_graficos(df1, df2):
-    fig, axs = plt.subplots(6, 1, figsize=(6, 12), constrained_layout=True)
+    """Genera gráficos comparativos para los dos datasets"""
+    fig, axs = plt.subplots(6, 1, figsize=(9, 15))
     datasets = [(df1, "PA01"), (df2, "PA02")]
     coords = ['easting', 'northing', 'altitude']
     titulos = ['Easting', 'Northing', 'Altitude']
@@ -19,12 +19,35 @@ def generar_graficos(df1, df2):
             x = np.linspace(min(datos), max(datos), 200)
             p = (1 / (std * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / std) ** 2)
             ax.plot(x, p, 'r', linewidth=2, label=f"Curva de Gauss (σ = {std:.4f} m)")
-            ax.set_title(f"{nombre} - {titulos[i]}", fontname='Times New Roman', fontsize=12)
-            ax.set_xlabel("Valor", fontname='Times New Roman', fontsize=10)
-            ax.set_ylabel("Densidad", fontname='Times New Roman', fontsize=10)
-            ax.legend(loc='upper right', fontsize=8)
+            ax.set_title(f"{nombre} - {titulos[i]}")
+            ax.set_xlabel("Valor")
+            ax.set_ylabel("Densidad")
+            ax.legend()
             ax.grid(True, linestyle='--', linewidth=0.5)
 
-    img_path = "comparativo_graficos.png"
-    fig.savefig(img_path, dpi=200)
+    plt.tight_layout()
+    st.pyplot(fig)
     plt.close(fig)
+
+def mostrar_resultados(resultados, serie):
+    """Muestra los resultados de la evaluación en Streamlit"""
+    st.subheader(f"📊 Resultados para equipo {serie}")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Grados de libertad", resultados['gl'])
+        st.metric("Desviación estándar s_xy", f"{resultados['s_xy']:.5f} m")
+        st.metric("Desviación estándar s_z", f"{resultados['sh_corregido']:.5f} m")
+    
+    with col2:
+        st.metric("Umbral ISO XY", f"{resultados['umbral_xy']:.5f} m")
+        st.metric("Umbral ISO Z", f"{resultados['umbral_z']:.5f} m")
+    
+    if resultados['aprobado']:
+        st.success("✅ El equipo APRUEBA la certificación ISO 17123-8.")
+    else:
+        st.error("❌ El equipo NO aprueba la certificación:")
+        if resultados['s_xy'] > resultados['umbral_xy']:
+            st.error("⚠️ Std_Horizontal ISO excede el umbral permitido.")
+        if resultados['sh_corregido'] > resultados['umbral_z']:
+            st.error("⚠️ Std_Vertical ISO excede el umbral permitido.")
