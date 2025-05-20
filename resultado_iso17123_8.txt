@@ -1,5 +1,0 @@
-=== Evaluación ISO 17123-8 ===
-Desviación estándar XY: 0.001321 m
-Desviación estándar Z : 0.001892 m
-Límite ISO XY: 0.005550 m --> APROBADO
-Límite ISO Z : 0.010307 m --> APROBADO
