@@ -31,13 +31,13 @@ def generar_graficos(df1, df2):
 
 def mostrar_resultados(resultados, serie):
     """Muestra los resultados de la evaluación en Streamlit"""
-    st.subheader(f"📊 Resultados para equipo {serie}")
+    st.subheader(f"Resultados para equipo {serie}")
     
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Grados de libertad", resultados['gl'])
-        st.metric("Desviación estándar s_xy", f"{resultados['s_xy']:.5f} m")
-        st.metric("Desviación estándar s_z", f"{resultados['sh_corregido']:.5f} m")
+        st.metric("Desviación estándar XY", f"{resultados['s_xy']:.5f} m")
+        st.metric("Desviación estándar Z", f"{resultados['sh_corregido']:.5f} m")
     
     with col2:
         st.metric("Umbral ISO XY", f"{resultados['umbral_xy']:.5f} m")
@@ -48,6 +48,6 @@ def mostrar_resultados(resultados, serie):
     else:
         st.error("❌ El equipo NO aprueba la certificación:")
         if resultados['s_xy'] > resultados['umbral_xy']:
-            st.error("⚠️ Std_Horizontal ISO excede el umbral permitido.")
+            st.error("STD Horizontal ISO excede el umbral permitido.")
         if resultados['sh_corregido'] > resultados['umbral_z']:
-            st.error("⚠️ Std_Vertical ISO excede el umbral permitido.")
+            st.error("STD Vertical ISO excede el umbral permitido.")

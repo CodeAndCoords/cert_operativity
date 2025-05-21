@@ -6,7 +6,7 @@ def cargar_csv(nombre_archivo):
     try:
         df = pd.read_csv(nombre_archivo)
         st.success(f"Archivo {nombre_archivo.name} cargado correctamente")
-        st.write(f"📊 Registros cargados: {len(df)}")
+        st.write(f"Registros cargados: {len(df)}")
         return df
     except Exception as e:
         st.error(f"Error al cargar el archivo: {str(e)}")
