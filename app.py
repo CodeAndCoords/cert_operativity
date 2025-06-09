@@ -49,7 +49,7 @@ col1, col2 = st.columns(2,vertical_alignment="bottom" )
 with col1:
     imagen_izq = Image.open("files/metta_logo_hd.png") 
     st.logo(
-    imagen_izq)
+    imagen_izq, size="large")
         
 with col2:
     imagen_der = Image.open("files/Shabby stamp(bonus).png")
